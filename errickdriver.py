@@ -29,42 +29,8 @@ def motor1speed(address,speed):
     port.write("".join(chr(i) for i in [address, command1, speed, checksum1]))
     port.write("".join(chr(i) for i in [address, command2, pscale(speed,0,127,127,0), checksum2]))
 
-'''def motor2speed(address,speed):
-    port = serial.Serial('/dev/ttyUSB0')
-    if(speed > 127):
-        speed = 127
-    if(speed < 0):
-        speed = 0
-    port.isOpen()
-    command1 = 6
-    command2 = 7
-    checksum1 = (address + command1 + speed) & 127
-    checksum2 = (address + command2 + pscale(speed,0,127,127,0)) & 127
-   # print("Right Speed: " + str(speed))
-    port.write("".join(chr(i) for i in [address, 14, 10, (address + 24) & 127]))
-    port.write("".join(chr(i) for i in [address, command1, speed, checksum1]))
-    port.write("".join(chr(i) for i in [address, command2, pscale(speed,0,127,127,0), checksum2]))
-'''
-
-
-
 def callback(msg):
-    print("joy received")
-    rospy.loginfo("Twist Message")
-    rospy.loginfo("Linear Components: [%f, %f, %f]"%(msg.linear.x, msg.linear.y, msg.linear.z))
-    rospy.loginfo("Angular Components: [%f, %f, %f]"%(msg.angular.x, msg.angular.y, msg.angular.z))
-    v1 = (msg.linear.x - msg.angular.z);
-    v2 = (msg.linear.x + msg.angular.z);
-    print(v1) #min is -2.8 to 2.8
-    print(v2)
-    #to properly scale these numbers you need
-    # to map the values from (-2.8,2.8) to (0,127)
-    scaledv1 = pscale(v1,-1.0,1.0,0,127)
-    scaledv2 = pscale(v2,-1.0,1.0,0,127)
-    print("Right Speed: " + str(scaledv1))
-    print("Left Speed: " + str(scaledv2))
-    motor1speed(address1,int(round(scaledv1,2)))
-    motor2speed(address2,int(round(scaledv2,2)))
+
 
 def listener():
 
